@@ -2,6 +2,8 @@ package com.sypherxn.smpbounty;
 
 import com.sypherxn.smpbounty.commands.CommandManager;
 import com.sypherxn.smpbounty.listeners.Listeners;
+import com.sypherxn.smpbounty.util.ChatUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SMPBounty extends JavaPlugin {

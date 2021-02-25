@@ -1,7 +1,9 @@
 package com.sypherxn.smpbounty.gui;
 
 import com.sypherxn.smpbounty.util.PDCUtil;
+import com.sypherxn.smpbounty.util.PlayerUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -52,8 +54,8 @@ public class GUI {
                 SkullMeta meta = (SkullMeta) playerSkull.getItemMeta();
                 meta.setOwningPlayer(onlinePlayerList.get(i));
                 meta.setDisplayName(onlinePlayerList.get(i).getName());
-                desc.add("Click to view bounty");
-                desc.add("Bounty Placer: " + Bukkit.getPlayer(PDCUtil.getBountyPlacer(onlinePlayerList.get(i))).getName());
+                desc.add(ChatColor.GOLD + "Click to view bounty");
+                desc.add(ChatColor.AQUA + "Bounty Placer: " + PlayerUtil.getPlayer(PDCUtil.getBountyPlacer(onlinePlayerList.get(i))).getName());
                 meta.setLore(desc);
 
                 playerSkull.setItemMeta(meta);

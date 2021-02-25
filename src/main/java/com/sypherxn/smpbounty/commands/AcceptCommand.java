@@ -1,7 +1,9 @@
 package com.sypherxn.smpbounty.commands;
 
 import com.sypherxn.smpbounty.SMPBounty;
+import com.sypherxn.smpbounty.util.ChatUtil;
 import com.sypherxn.smpbounty.util.PDCUtil;
+import com.sypherxn.smpbounty.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -12,48 +14,55 @@ public class AcceptCommand extends SubCommand {
     @Override
     public void onCommand(Player p, String[] args) {
 
+        //Checks for players ability to run the command
         if(!PDCUtil.isEnabled(p)) {
 
-            p.sendMessage("You must be bounty-enabled to accept bounties");
+            ChatUtil.sendMessage(p, "You must be bounty-enabled to accept bounties");
             return;
 
         }
 
         if(PDCUtil.hasHunting(p)) {
 
-            p.sendMessage("You can only hunt one player at a time");
+            ChatUtil.sendMessage(p, "You can only hunt one player at a time");
             return;
 
         }
 
         if(PDCUtil.hasTargeting(p)) {
 
-            p.sendMessage("You cannot accept a bounty while you have one placed on someone");
+            ChatUtil.sendMessage(p, "You cannot accept a bounty while you have one placed on someone");
             return;
 
         }
 
         if(!PDCUtil.getCollectItems(p).isEmpty()) {
 
-            p.sendMessage("You cannot accept a bounty while there items in your collection");
+            ChatUtil.sendMessage(p, "You cannot accept a bounty while there items in your collection");
             return;
 
         }
 
+        if(args.length < 1) {
+
+            ChatUtil.sendMessage(p, "Correct usage /bounty accept <player name>");
+
+        }
+
         String targetName = args[1];
-        Player target = Bukkit.getPlayerExact(targetName);
+        Player target = PlayerUtil.getPlayer(targetName);
         UUID targetUUID = target.getUniqueId();
 
         if(targetUUID == null) {
 
-            p.sendMessage(targetName + " could not be found");
+            ChatUtil.sendMessage(p, targetName + " could not be found");
             return;
 
         }
 
         if(target.getUniqueId().equals(p.getUniqueId())) {
 
-            p.sendMessage("You cannot accept a bounty on yourself");
+            ChatUtil.sendMessage(p, "You cannot accept a bounty on yourself");
             return;
 
         }
@@ -61,27 +70,30 @@ public class AcceptCommand extends SubCommand {
         targetName = target.getName();
         if(!PDCUtil.hasBountyPlacer(target)) {
 
-            p.sendMessage(targetName + " doesn't have a bounty on them");
+            ChatUtil.sendMessage(p, targetName + " doesn't have a bounty on them");
             return;
 
         }
 
         if(PDCUtil.hasHunting(target)) {
 
-            p.sendMessage(targetName + " is already being hunted by " + Bukkit.getPlayer(PDCUtil.getBountyHunter(target)).getName());
+            ChatUtil.sendMessage(p, targetName + " is already being hunted by " + PlayerUtil.getPlayer(PDCUtil.getBountyHunter(target)).getName());
             return;
 
         }
 
+        //Retrieves information about players related to this command
         UUID bountyPlacerUUID = PDCUtil.getBountyPlacer(target);
-        Player bountyPlacer = Bukkit.getPlayer(bountyPlacerUUID);
+        Player bountyPlacer = PlayerUtil.getPlayer(bountyPlacerUUID);
         String bountyPlacerName = bountyPlacer.getName();
 
+        //Sets information for the player being targeted
         PDCUtil.setBountyHunter(target, p.getUniqueId());
-        target.sendMessage(p.getName() + " has accepted " + bountyPlacerName + "'s bounty on you");
+        ChatUtil.sendMessage(target, p.getName() + " has accepted " + bountyPlacerName + "'s bounty on you");
 
+        //Sets information for the player accepting
         PDCUtil.setHunting(p, targetUUID);
-        p.sendMessage("You have accepted " + bountyPlacerName + "'s bounty on " + targetName);
+        ChatUtil.sendMessage(p, "You have accepted " + bountyPlacerName + "'s bounty on " + targetName);
 
     }
 

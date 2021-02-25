@@ -49,7 +49,7 @@ public class PDCUtil {
 
     public static void setHunting(Player p, String huntingName) {
         data = p.getPersistentDataContainer();
-        UUID huntingUUID = Bukkit.getPlayerExact(huntingName).getUniqueId();
+        UUID huntingUUID = PlayerUtil.getPlayer(huntingName).getUniqueId();
         String huntingUUIDString = huntingUUID.toString();
         data.set(new NamespacedKey(SMPBounty.getPlugin(), "Hunting"), PersistentDataType.STRING, huntingUUIDString);
     }
@@ -87,7 +87,7 @@ public class PDCUtil {
 
     public static void setTargeting(Player p, String targetingName) {
         data = p.getPersistentDataContainer();
-        UUID targetingUUID = Bukkit.getPlayerExact(targetingName).getUniqueId();
+        UUID targetingUUID = PlayerUtil.getPlayer(targetingName).getUniqueId();
         String targetingUUIDString = targetingUUID.toString();
         data.set(new NamespacedKey(SMPBounty.getPlugin(), "Targeting"), PersistentDataType.STRING, targetingUUIDString);
     }
@@ -125,7 +125,7 @@ public class PDCUtil {
 
     public static void setBountyHunter(Player p, String bountyHunterName) {
         data = p.getPersistentDataContainer();
-        UUID bountyHunterUUID = Bukkit.getPlayerExact(bountyHunterName).getUniqueId();
+        UUID bountyHunterUUID = PlayerUtil.getPlayer(bountyHunterName).getUniqueId();
         String bountyHunterUUIDString = bountyHunterUUID.toString();
         data.set(new NamespacedKey(SMPBounty.getPlugin(), "BountyHunter"), PersistentDataType.STRING, bountyHunterUUIDString);
     }
@@ -163,7 +163,7 @@ public class PDCUtil {
 
     public static void setBountyPlacer(Player p, String bountyPlacerName) {
         data = p.getPersistentDataContainer();
-        UUID bountyPlacerUUID = Bukkit.getPlayerExact(bountyPlacerName).getUniqueId();
+        UUID bountyPlacerUUID = PlayerUtil.getPlayer(bountyPlacerName).getUniqueId();
         String bountyPlacerUUIDString = bountyPlacerUUID.toString();
         data.set(new NamespacedKey(SMPBounty.getPlugin(), "BountyPlacer"), PersistentDataType.STRING, bountyPlacerUUIDString);
     }

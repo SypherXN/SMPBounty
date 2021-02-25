@@ -2,7 +2,9 @@ package com.sypherxn.smpbounty.listeners;
 
 import com.sypherxn.smpbounty.SMPBounty;
 import com.sypherxn.smpbounty.gui.GUI;
+import com.sypherxn.smpbounty.util.ChatUtil;
 import com.sypherxn.smpbounty.util.PDCUtil;
+import com.sypherxn.smpbounty.util.PlayerUtil;
 import com.sypherxn.smpbounty.util.StatsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -106,7 +108,7 @@ public class Listeners implements Listener {
 
             if(e.getInventory().isEmpty()) {
 
-                p.sendMessage("You cannot place a bounty with no reward!");
+                ChatUtil.sendMessage(p, "You cannot place a bounty with no reward!");
                 return;
 
             }
@@ -128,16 +130,16 @@ public class Listeners implements Listener {
                     .forEach(items::add);
 
             String targetName = e.getView().getTitle().substring(14);
-            Player target = Bukkit.getPlayerExact(targetName);
+            Player target = PlayerUtil.getPlayer(targetName);
             UUID targetUUID = target.getUniqueId();
 
             PDCUtil.setRewardItems(target, items);
             PDCUtil.setBountyPlacer(target, p.getUniqueId());
-            target.sendMessage(p.getName() + " has placed a bounty on you!");
+            ChatUtil.sendMessage(target, p.getName() + " has placed a bounty on you!");
 
             PDCUtil.setTargeting(p, targetUUID);
             PDCUtil.setPlaceTimeCurrent(p);
-            p.sendMessage("You have successfully placed a bounty on " + targetName);
+            ChatUtil.sendMessage(p, "You have successfully placed a bounty on " + targetName);
 
         }
 
@@ -161,7 +163,7 @@ public class Listeners implements Listener {
 
             }
 
-            p.sendMessage("You will not be able to perform other bounty tasks with items left in your collection!");
+            ChatUtil.sendMessage(p, "You will not be able to perform other bounty tasks with items left in your collection!");
 
             ArrayList<ItemStack> items = new ArrayList<>();
 
@@ -211,7 +213,7 @@ public class Listeners implements Listener {
         ItemStack clickedItem = e.getCurrentItem();
         String name = clickedItem.getItemMeta().getDisplayName();
         Player p = (Player) e.getWhoClicked();
-        Player target = Bukkit.getPlayerExact(name);
+        Player target = PlayerUtil.getPlayer(name);
 
         if(listCheck.equalsIgnoreCase("Bounty List")) {
 
@@ -239,24 +241,24 @@ public class Listeners implements Listener {
             UUID bountyPlacerUUID = PDCUtil.getBountyPlacer(death);
             UUID deathHunterUUID = PDCUtil.getBountyHunter(death);
 
-            Player bountyPlacer = Bukkit.getPlayer(bountyPlacerUUID);
+            Player bountyPlacer = PlayerUtil.getPlayer(bountyPlacerUUID);
             if(deathHunterUUID.equals(killerUUID)) {
 
-                Bukkit.broadcastMessage("Test");
+                ChatUtil.sendBroadcast("Test");
 
-                Bukkit.broadcastMessage(killer.getName() + " has killed " + death.getName() + " and has collected their reward from " + bountyPlacer.getName());
+                ChatUtil.sendBroadcast(killer.getName() + " has killed " + death.getName() + " and has collected their reward from " + bountyPlacer.getName());
 
                 ArrayList<ItemStack> reward = PDCUtil.getRewardItems(death);
                 PDCUtil.setCollectItems(killer, reward);
                 PDCUtil.clearHunting(killer);
                 StatsUtil.incrementBountyKills(killer);
-                killer.sendMessage("Use \"/bounty collect\" to retrieve your reward items!");
+                ChatUtil.sendMessage(killer, "Use \"/bounty collect\" to retrieve your reward items!");
 
                 PDCUtil.clearBountyHunter(death);
                 PDCUtil.clearBountyPlacer(death);
                 PDCUtil.clearRewardItems(death);
                 PDCUtil.setEnableState(death, "Disabled");
-                death.sendMessage("You are no longer bounty-enabled!");
+                ChatUtil.sendMessage(death, "You are no longer bounty-enabled!");
 
                 PDCUtil.clearTargeting(bountyPlacer);
 
@@ -266,21 +268,21 @@ public class Listeners implements Listener {
 
             UUID deathHuntingUUID = PDCUtil.getHunting(death);
             bountyPlacerUUID = PDCUtil.getBountyPlacer(killer);
-            bountyPlacer = Bukkit.getPlayer(bountyPlacerUUID);
+            bountyPlacer = PlayerUtil.getPlayer(bountyPlacerUUID);
 
-            Bukkit.broadcastMessage(deathHuntingUUID.toString());
-            Bukkit.broadcastMessage(killerUUID.toString());
+            ChatUtil.sendBroadcast(deathHuntingUUID.toString());
+            ChatUtil.sendBroadcast(killerUUID.toString());
 
             if(deathHuntingUUID.equals(killerUUID)) {
 
-                Bukkit.broadcastMessage(death.getName() + " has failed to complete " + bountyPlacer.getName() + "'s bounty on " + killer.getName());
+                ChatUtil.sendBroadcast(death.getName() + " has failed to complete " + bountyPlacer.getName() + "'s bounty on " + killer.getName());
 
                 PDCUtil.clearHunting(death);
                 StatsUtil.incrementBountyFailed(death);
 
                 ArrayList<ItemStack> reward = PDCUtil.getRewardItems(killer);
                 PDCUtil.setCollectItems(bountyPlacer, reward);
-                killer.sendMessage("Use \"/bounty collect\" to retrieve your bounty items!");
+                ChatUtil.sendMessage(killer, "Use \"/bounty collect\" to retrieve your bounty items!");
                 PDCUtil.clearTargeting(bountyPlacer);
 
                 PDCUtil.clearBountyHunter(killer);

@@ -1,7 +1,9 @@
 package com.sypherxn.smpbounty.commands;
 
 import com.sypherxn.smpbounty.SMPBounty;
+import com.sypherxn.smpbounty.util.ChatUtil;
 import com.sypherxn.smpbounty.util.PDCUtil;
+import com.sypherxn.smpbounty.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -12,31 +14,34 @@ public class CancelCommand extends SubCommand {
     @Override
     public void onCommand(Player p, String[] args) {
 
+        //Check to see if player can run this command
         if(!PDCUtil.hasTargeting(p)) {
 
-            p.sendMessage("You have not placed a bounty yet");
+            ChatUtil.sendMessage(p,"You have not placed a bounty yet");
             return;
 
         }
 
         UUID targetUUID = PDCUtil.getTargeting(p);
-        Player target = Bukkit.getPlayer(targetUUID);
+        Player target = PlayerUtil.getPlayer(targetUUID);
 
         if(PDCUtil.hasBountyHunter(target)) {
 
-            p.sendMessage("You cannot cancel a bounty somebody has already accepted");
+            ChatUtil.sendMessage(p, "You cannot cancel a bounty somebody has already accepted");
             return;
 
         }
 
+        //Update information for the player running the command
         PDCUtil.clearTargeting(p);
         PDCUtil.setCollectItems(p, PDCUtil.getRewardItems(target));
-        p.sendMessage("You have successfully removed the bounty off of " + target.getName());
-        p.sendMessage("Your bounty has been placed into your /bounty collect");
+        ChatUtil.sendMessage(p, "You have successfully removed the bounty off of " + target.getName());
+        ChatUtil.sendMessage(p, "Your bounty has been placed into your /bounty collect");
 
+        //Update information for the player being hunted
         PDCUtil.clearBountyPlacer(target);
         PDCUtil.clearRewardItems(target);
-        target.sendMessage(p.getName() + " has removed their bounty on you");
+        ChatUtil.sendMessage(target, p.getName() + " has removed their bounty on you");
 
     }
 

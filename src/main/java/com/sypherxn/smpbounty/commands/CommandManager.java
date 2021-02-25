@@ -1,6 +1,7 @@
 package com.sypherxn.smpbounty.commands;
 
 import com.sypherxn.smpbounty.SMPBounty;
+import com.sypherxn.smpbounty.util.ChatUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -45,8 +46,6 @@ public class CommandManager implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        System.out.println("CommandManager run");
-
         if(!(sender instanceof Player)) {
             sender.sendMessage("Only players can use commands for this plugin!");
             return false;
@@ -58,7 +57,7 @@ public class CommandManager implements CommandExecutor {
 
             if(args.length == 0) {
 
-                p.sendMessage("Invalid command. Type /bounty help for help");
+                ChatUtil.sendMessage(p, "Invalid command. Type /bounty help for help");
                 return false;
 
             }
@@ -67,7 +66,7 @@ public class CommandManager implements CommandExecutor {
 
             if (target == null) {
 
-                p.sendMessage("Invalid command. Type /bounty help for help");
+                ChatUtil.sendMessage(p, "Invalid command. Type /bounty help for help");
                 return false;
 
             }
@@ -83,7 +82,7 @@ public class CommandManager implements CommandExecutor {
 
             } catch (Exception e) {
 
-                p.sendMessage("An error has occurred.");
+                ChatUtil.sendMessage(p, "Invalid command. Type /bounty help for help");
                 e.printStackTrace();
 
             }

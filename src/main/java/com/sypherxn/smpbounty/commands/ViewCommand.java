@@ -2,7 +2,9 @@ package com.sypherxn.smpbounty.commands;
 
 import com.sypherxn.smpbounty.SMPBounty;
 import com.sypherxn.smpbounty.gui.GUI;
+import com.sypherxn.smpbounty.util.ChatUtil;
 import com.sypherxn.smpbounty.util.PDCUtil;
+import com.sypherxn.smpbounty.util.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -16,18 +18,18 @@ public class ViewCommand extends SubCommand {
 
         if(!PDCUtil.isEnabled(p)) {
 
-            p.sendMessage("You cannot view bounties if you are not bounty-enabled");
+            ChatUtil.sendMessage(p, "You cannot view bounties if you are not bounty-enabled");
             return;
 
         }
 
         String targetName = args[1];
-        Player target = Bukkit.getPlayerExact(targetName);
+        Player target = PlayerUtil.getPlayer(targetName);
         UUID targetUUID = target.getUniqueId();
 
         if(targetUUID == null) {
 
-            p.sendMessage(targetName + " could not be found");
+            ChatUtil.sendMessage(p, targetName + " could not be found");
             return;
 
         }

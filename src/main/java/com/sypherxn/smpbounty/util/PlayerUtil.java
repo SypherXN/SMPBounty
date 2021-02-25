@@ -1,0 +1,32 @@
+package com.sypherxn.smpbounty.util;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
+
+public class PlayerUtil {
+
+    //Returns the player even if they are offline
+    public static Player getPlayer(String name) {
+
+        Player p = Bukkit.getPlayerExact(name);
+        if(p.equals(null)) {
+
+            return (Player) Bukkit.getOfflinePlayer(name);
+
+        }
+
+        return p;
+
+    }
+
+    public static Player getPlayer(UUID id) {
+
+        Player p = Bukkit.getPlayer(id);
+
+        return p;
+
+    }
+
+}
