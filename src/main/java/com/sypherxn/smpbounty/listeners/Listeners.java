@@ -207,9 +207,7 @@ public class Listeners implements Listener {
     @EventHandler
     public void listToViewClick(InventoryClickEvent e) {
 
-        if(e.getView().getTitle().length() < 11) { return; }
-
-        String listCheck = e.getView().getTitle().substring(0, 11);
+        String listCheck = e.getView().getTitle();
         ItemStack clickedItem = e.getCurrentItem();
         String name = clickedItem.getItemMeta().getDisplayName();
         Player p = (Player) e.getWhoClicked();

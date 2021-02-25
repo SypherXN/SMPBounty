@@ -31,6 +31,7 @@ public class CommandManager implements CommandExecutor {
     public String accept = "accept";
     public String view = "view";
     public String list = "list";
+    public String stats = "stats";
 
     //Moderation Command
     public String clear = "clear";

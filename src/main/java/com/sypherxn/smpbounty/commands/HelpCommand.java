@@ -28,7 +28,7 @@ public class HelpCommand extends SubCommand {
 
     @Override
     public String name() {
-        return "help";
+        return SMPBounty.getPlugin().commandManager.help;
     }
 
     @Override
