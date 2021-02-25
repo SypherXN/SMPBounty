@@ -38,7 +38,7 @@ public class AcceptCommand extends SubCommand {
 
         if(!PDCUtil.getCollectItems(p).isEmpty()) {
 
-            ChatUtil.sendMessage(p, "You cannot accept a bounty while there items in your collection");
+            ChatUtil.sendMessage(p, "You cannot accept a bounty while there are items in your collection");
             return;
 
         }
