@@ -23,7 +23,7 @@ public class CancelCommand extends SubCommand {
         }
 
         UUID targetUUID = PDCUtil.getTargeting(p);
-        Player target = PlayerUtil.getPlayer(targetUUID);
+        Player target = PlayerUtil.getPlayer(p, targetUUID);
 
         if(PDCUtil.hasBountyHunter(target)) {
 

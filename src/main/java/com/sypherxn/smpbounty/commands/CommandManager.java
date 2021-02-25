@@ -82,7 +82,7 @@ public class CommandManager implements CommandExecutor {
 
             } catch (Exception e) {
 
-                ChatUtil.sendMessage(p, "Invalid command. Type /bounty help for help");
+                System.out.println(e);
                 e.printStackTrace();
 
             }

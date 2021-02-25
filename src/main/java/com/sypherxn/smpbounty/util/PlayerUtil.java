@@ -8,12 +8,27 @@ import java.util.UUID;
 public class PlayerUtil {
 
     //Returns the player even if they are offline
-    public static Player getPlayer(String name) {
+    public static Player getPlayer(Player sender, String name) {
 
         Player p = Bukkit.getPlayerExact(name);
-        if(p.equals(null)) {
+        if(p == null) {
 
-            return (Player) Bukkit.getOfflinePlayer(name);
+            ChatUtil.sendMessage(sender, "Player is not currently online");
+            return null;
+
+        }
+
+        return p;
+
+    }
+
+    public static Player getPlayer(Player sender, UUID id) {
+
+        Player p = Bukkit.getPlayer(id);
+        if(p == null) {
+
+            ChatUtil.sendMessage(sender, "Player is not currently online");
+            return null;
 
         }
 
@@ -24,6 +39,14 @@ public class PlayerUtil {
     public static Player getPlayer(UUID id) {
 
         Player p = Bukkit.getPlayer(id);
+
+        return p;
+
+    }
+
+    public static Player getPlayer(String name) {
+
+        Player p = Bukkit.getPlayerExact(name);
 
         return p;
 

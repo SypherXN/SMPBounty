@@ -23,8 +23,14 @@ public class ViewCommand extends SubCommand {
 
         }
 
+        if(args.length < 1) {
+
+            ChatUtil.sendMessage(p, "Correct usage /bounty accept <player name>");
+
+        }
+
         String targetName = args[1];
-        Player target = PlayerUtil.getPlayer(targetName);
+        Player target = PlayerUtil.getPlayer(p, targetName);
         UUID targetUUID = target.getUniqueId();
 
         if(targetUUID == null) {

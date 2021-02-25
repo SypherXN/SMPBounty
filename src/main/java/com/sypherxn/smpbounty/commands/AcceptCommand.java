@@ -50,7 +50,7 @@ public class AcceptCommand extends SubCommand {
         }
 
         String targetName = args[1];
-        Player target = PlayerUtil.getPlayer(targetName);
+        Player target = PlayerUtil.getPlayer(p, targetName);
         UUID targetUUID = target.getUniqueId();
 
         if(targetUUID == null) {
