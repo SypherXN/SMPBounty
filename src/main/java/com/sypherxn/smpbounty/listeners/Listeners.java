@@ -244,8 +244,6 @@ public class Listeners implements Listener {
             Player bountyPlacer = PlayerUtil.getPlayer(bountyPlacerUUID);
             if(deathHunterUUID.equals(killerUUID)) {
 
-                ChatUtil.sendBroadcast("Test");
-
                 ChatUtil.sendBroadcast(killer.getName() + " has killed " + death.getName() + " and has collected their reward from " + bountyPlacer.getName());
 
                 ArrayList<ItemStack> reward = PDCUtil.getRewardItems(death);
@@ -269,9 +267,6 @@ public class Listeners implements Listener {
             UUID deathHuntingUUID = PDCUtil.getHunting(death);
             bountyPlacerUUID = PDCUtil.getBountyPlacer(killer);
             bountyPlacer = PlayerUtil.getPlayer(bountyPlacerUUID);
-
-            ChatUtil.sendBroadcast(deathHuntingUUID.toString());
-            ChatUtil.sendBroadcast(killerUUID.toString());
 
             if(deathHuntingUUID.equals(killerUUID)) {
 

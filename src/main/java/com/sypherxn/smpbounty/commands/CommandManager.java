@@ -14,10 +14,15 @@ import java.util.Iterator;
 public class CommandManager implements CommandExecutor {
 
     private ArrayList<SubCommand> commands = new ArrayList<SubCommand>();
+    private ArrayList<SubCommand> modCommands = new ArrayList<SubCommand>();
+    private ArrayList<SubCommand> allCommands = new ArrayList<SubCommand>();
+
     private SMPBounty plugin = SMPBounty.getPlugin();
 
+    //Main command
     public String main = "bounty";
 
+    //Public Commands
     public String help = "help";
     public String enable = "enable";
     public String place = "place";
@@ -27,10 +32,18 @@ public class CommandManager implements CommandExecutor {
     public String view = "view";
     public String list = "list";
 
+    //Moderation Command
+    public String clear = "clear";
+    public String reset = "reset";
+    public String set = "set";
+    public String get = "get";
+
     public void setup() {
 
+        //Set main /bounty command
         plugin.getCommand(main).setExecutor(this);
 
+        //Add public commands
         this.commands.add(new HelpCommand());
         this.commands.add(new EnableCommand());
         this.commands.add(new PlaceCommand());
@@ -39,6 +52,22 @@ public class CommandManager implements CommandExecutor {
         this.commands.add(new AcceptCommand());
         this.commands.add(new ViewCommand());
         this.commands.add(new ListCommand());
+
+        //Add moderation commands
+        this.modCommands.add(new ClearCommand());
+        this.modCommands.add(new GetCommand());
+
+        for(int i = 0; i < commands.size(); i++) {
+
+            allCommands.add(commands.get(i));
+
+        }
+
+        for(int i = 0; i < modCommands.size(); i++) {
+
+            allCommands.add(modCommands.get(i));
+
+        }
 
     }
 
@@ -94,7 +123,7 @@ public class CommandManager implements CommandExecutor {
 
     private SubCommand get(String name) {
 
-        Iterator<SubCommand> subcommands = this.commands.iterator();
+        Iterator<SubCommand> subcommands = this.allCommands.iterator();
 
         while (subcommands.hasNext()) {
             SubCommand sc = (SubCommand) subcommands.next();
@@ -125,5 +154,7 @@ public class CommandManager implements CommandExecutor {
 
     }
 
-
+    public ArrayList<SubCommand> getCommands() {
+        return commands;
+    }
 }

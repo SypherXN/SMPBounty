@@ -226,7 +226,7 @@ public class PDCUtil {
     }
 
     //Key - "PlaceTime"
-    private static long placeCooldownTime = 86400;
+    private static long placeCooldownTime = 43200;
     public static void setPlaceTimeCurrent(Player p) {
         data = p.getPersistentDataContainer();
         long currentTime = System.currentTimeMillis();
@@ -264,7 +264,7 @@ public class PDCUtil {
     }
 
     //Key - "ShieldTime"
-    private static long shieldLength = 21600;
+    private static long shieldLength = 3600;
     public static void setShieldTimeCurrent(Player p) {
         data = p.getPersistentDataContainer();
         long currentTime = System.currentTimeMillis();
