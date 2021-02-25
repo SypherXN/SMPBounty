@@ -1,0 +1,10 @@
+name: SMPBounty
+version: ${project.version}
+main: com.sypherxn.smpbounty.SMPBounty
+api-version: 1.16
+authors: [ SypherXN ]
+description: Bounty hunting plugin designed for SMP servers
+commands:
+  bounty:
+    usage: /bounty
+    description: base command for SMPBounty
