@@ -1,5 +1,6 @@
 package com.sypherxn.smpbounty.commands;
 
+import com.sypherxn.smpbounty.SMPBounty;
 import com.sypherxn.smpbounty.util.ChatUtil;
 import com.sypherxn.smpbounty.util.PDCUtil;
 import com.sypherxn.smpbounty.util.PlayerUtil;
@@ -17,22 +18,23 @@ public class GetCommand extends SubCommand {
 
         }
 
-        if(args.length < 1) {
+        if(args.length < 2) {
 
-            ChatUtil.sendMessage(p, "You need to specify your target");
+            ChatUtil.sendMessage(p, "Correct Usage: /bounty get <Player Name>");
             return;
 
         }
 
-        String targetName = args[1];
-        Player target = PlayerUtil.getPlayer(p, targetName);
+        Player target = PlayerUtil.getPlayer(p, args[1]);
+
+        if(target == null) { return; }
 
         ChatUtil.sendMessage(p, target.getName() + " Bounty Data");
         ChatUtil.sendMessage(p, "EnableState: " + PDCUtil.getEnableState(target));
-        ChatUtil.sendMessage(p, "Hunting: " + PlayerUtil.getPlayer(PDCUtil.getHunting(target)).getName());
-        ChatUtil.sendMessage(p, "Targeting: " + PlayerUtil.getPlayer(PDCUtil.getTargeting(target)).getName());
-        ChatUtil.sendMessage(p, "BountyHunter: " + PlayerUtil.getPlayer(PDCUtil.getBountyHunter(target)).getName());
-        ChatUtil.sendMessage(p, "BountyPlacer: " + PlayerUtil.getPlayer(PDCUtil.getBountyPlacer(target)).getName());
+        ChatUtil.sendMessage(p, "Hunting: " + PDCUtil.getHunting(target).toString());
+        ChatUtil.sendMessage(p, "Targeting: " + PDCUtil.getTargeting(target).toString());
+        ChatUtil.sendMessage(p, "BountyHunter: " + PDCUtil.getBountyHunter(target).toString());
+        ChatUtil.sendMessage(p, "BountyPlacer: " + PDCUtil.getBountyPlacer(target).toString());
         ChatUtil.sendMessage(p, "PlaceCooldown: " + PDCUtil.getRemainingPlaceCooldown(target));
         ChatUtil.sendMessage(p, "ShieldTime: " + PDCUtil.getRemainingShieldTime(target));
         ChatUtil.sendMessage(p, "RewardItems: " + PDCUtil.getRewardItems(target).toString());
@@ -42,9 +44,7 @@ public class GetCommand extends SubCommand {
     }
 
     @Override
-    public String name() {
-        return null;
-    }
+    public String name() { return SMPBounty.getPlugin().commandManager.get; }
 
     @Override
     public String info() {
