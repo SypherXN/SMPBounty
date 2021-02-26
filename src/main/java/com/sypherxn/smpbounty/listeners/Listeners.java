@@ -2,6 +2,8 @@ package com.sypherxn.smpbounty.listeners;
 
 import com.sypherxn.smpbounty.SMPBounty;
 import com.sypherxn.smpbounty.commands.AcceptCommand;
+import com.sypherxn.smpbounty.commands.CollectCommand;
+import com.sypherxn.smpbounty.commands.PlaceCommand;
 import com.sypherxn.smpbounty.commands.SubCommand;
 import com.sypherxn.smpbounty.gui.GUI;
 import com.sypherxn.smpbounty.util.ChatUtil;
@@ -102,12 +104,12 @@ public class Listeners implements Listener {
     @EventHandler
     public void bountyPlaceClose(InventoryCloseEvent e) {
 
-        if(e.getView().getTitle().length() < 13) { return; }
+        if(e.getView().getTitle().length() < 17) { return; }
 
-        String placeCheck = e.getView().getTitle().substring(0,13);
+        String placeCheck = e.getView().getTitle().substring(0,17);
         Player p = (Player) e.getPlayer();
 
-        if(placeCheck.equalsIgnoreCase("Bounty Place:")) {
+        if(placeCheck.equalsIgnoreCase(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty Place:")) {
 
             if(e.getInventory().isEmpty()) {
 
@@ -132,7 +134,7 @@ public class Listeners implements Listener {
                     })
                     .forEach(items::add);
 
-            String targetName = e.getView().getTitle().substring(14);
+            String targetName = e.getView().getTitle().substring(18);
             Player target = PlayerUtil.getPlayer(targetName);
             UUID targetUUID = target.getUniqueId();
 
@@ -152,12 +154,12 @@ public class Listeners implements Listener {
     @EventHandler
     public void bountyCollectClose(InventoryCloseEvent e) {
 
-        if(e.getView().getTitle().length() < 15) { return; }
+        if(e.getView().getTitle().length() < 19) { return; }
 
-        String collectCheck = e.getView().getTitle().substring(0,15);
+        String collectCheck = e.getView().getTitle().substring(0,19);
         Player p = (Player) e.getPlayer();
 
-        if(collectCheck.equalsIgnoreCase("Bounty Collect:")) {
+        if(collectCheck.equalsIgnoreCase(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty Collect:")) {
 
             if (e.getInventory().isEmpty()) {
 
@@ -194,18 +196,18 @@ public class Listeners implements Listener {
     @EventHandler
     public void viewClick(InventoryClickEvent e) {
 
-        if(e.getView().getTitle().length() < 12) { return; }
+        if(e.getView().getTitle().length() < 16) { return; }
 
-        String viewCheck = e.getView().getTitle().substring(0,12);
+        String viewCheck = e.getView().getTitle().substring(0,16);
 
-        if(viewCheck.equalsIgnoreCase("Bounty View:")) {
+        if(viewCheck.equalsIgnoreCase(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty View:")) {
 
             e.setCancelled(true);
 
             ItemStack item = e.getCurrentItem();
             if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.GREEN + "CONFIRM")) {
 
-                String target = e.getView().getTitle().substring(13);
+                String target = e.getView().getTitle().substring(17);
 
                 SubCommand cmd = new AcceptCommand();
                 cmd.onCommand((Player) e.getWhoClicked(), new String[]{"", target});
@@ -216,7 +218,7 @@ public class Listeners implements Listener {
                 Inventory viewInv = GUI.getListView("View");
                 e.getWhoClicked().openInventory(viewInv);
 
-            } else if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("BACK")) {
+            } else if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RED + "BACK")) {
 
                 Inventory activeInv = GUI.getListView("Active");
                 e.getWhoClicked().openInventory(activeInv);
@@ -238,13 +240,90 @@ public class Listeners implements Listener {
         Player p = (Player) e.getWhoClicked();
         Player target = PlayerUtil.getPlayer(name);
 
-        if(listCheck.equalsIgnoreCase("Bounty List: View")) {
+        if(listCheck.equalsIgnoreCase(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty List: View")) {
+
+            if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RED + "BACK")) {
+
+                Inventory inv = GUI.getMainView(p);
+                p.openInventory(inv);
+                return;
+
+            }
 
             Inventory bountyView = GUI.getRewardView(target);
-
             p.openInventory(bountyView);
+            e.setCancelled(true);
+
+        } else if(listCheck.equalsIgnoreCase(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty List: Place")) {
+
+            if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RED + "BACK")) {
+
+                Inventory inv = GUI.getMainView(p);
+                p.openInventory(inv);
+                return;
+
+            }
 
             e.setCancelled(true);
+            SubCommand cmd = new PlaceCommand();
+            cmd.onCommand(p, new String[]{"", target.getName()});
+
+        } else if(listCheck.equalsIgnoreCase(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty List: Active")) {
+
+            if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RED + "BACK")) {
+
+                Inventory inv = GUI.getMainView(p);
+                p.openInventory(inv);
+                return;
+
+            }
+
+            e.setCancelled(true);
+            Inventory activeView = GUI.getActiveRewardView(target);
+            p.openInventory(activeView);
+
+        }
+
+    }
+
+    @EventHandler
+    public void mainGUIClick(InventoryClickEvent e) {
+
+        if(e.getView().getTitle().length() < 17) { return; }
+
+        String listCheck = e.getView().getTitle().substring(0, 17);
+        ItemStack clickedItem = e.getCurrentItem();
+        String name = clickedItem.getItemMeta().getDisplayName();
+        Player p = (Player) e.getWhoClicked();
+
+        if(listCheck.equalsIgnoreCase(ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty Office")) {
+            e.setCancelled(true);
+            switch (ChatColor.stripColor(name)) {
+                case "Bounty System Disabled":
+                    PDCUtil.setEnableState(p, "Enabled");
+                    Inventory inv = GUI.getMainView(p);
+                    p.openInventory(inv);
+                    break;
+
+                case "Place Bounty":
+                    Inventory inv2 = GUI.getListView("Place");
+                    p.openInventory(inv2);
+                    break;
+
+                case "View Bounties":
+                    Inventory inv3 = GUI.getListView("View");
+                    p.openInventory(inv3);
+                    break;
+                case "Currently Active Bounties":
+                    Inventory inv4 = GUI.getListView("Active");
+                    p.openInventory(inv4);
+                    break;
+                case "Collect Rewards":
+                    SubCommand cmd = new CollectCommand();
+                    cmd.onCommand(p, new String[0]);
+                    break;
+
+            }
 
         }
 
@@ -299,8 +378,8 @@ public class Listeners implements Listener {
                 StatsUtil.incrementBountyFailed(death);
 
                 ArrayList<ItemStack> reward = PDCUtil.getRewardItems(killer);
-                PDCUtil.setCollectItems(bountyPlacer, reward);
-                ChatUtil.sendMessage(killer, "Use \"/bounty collect\" to retrieve your bounty items!");
+                PDCUtil.setCollectItems(killer, reward);
+                ChatUtil.sendMessage(killer, "Use \"/bounty collect\" to retrieve your reward items!");
                 PDCUtil.clearTargeting(bountyPlacer);
 
                 PDCUtil.clearBountyHunter(killer);

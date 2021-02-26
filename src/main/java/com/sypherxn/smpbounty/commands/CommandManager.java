@@ -1,11 +1,13 @@
 package com.sypherxn.smpbounty.commands;
 
 import com.sypherxn.smpbounty.SMPBounty;
+import com.sypherxn.smpbounty.gui.GUI;
 import com.sypherxn.smpbounty.util.ChatUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,8 +37,6 @@ public class CommandManager implements CommandExecutor {
 
     //Moderation Command
     public String clear = "clear";
-    public String reset = "reset";
-    public String set = "set";
     public String get = "get";
 
     public void setup() {
@@ -87,8 +87,10 @@ public class CommandManager implements CommandExecutor {
 
             if(args.length == 0) {
 
-                ChatUtil.sendMessage(p, "Invalid command. Type /bounty help for help");
-                return false;
+                Inventory inv = GUI.getMainView(p);
+                p.openInventory(inv);
+
+                return true; //Code works in mysterious ways
 
             }
 
@@ -97,7 +99,7 @@ public class CommandManager implements CommandExecutor {
             if (target == null) {
 
                 ChatUtil.sendMessage(p, "Invalid command. Type /bounty help for help");
-                return false;
+                return true;
 
             }
 
