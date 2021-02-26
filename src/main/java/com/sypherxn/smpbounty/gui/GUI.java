@@ -39,10 +39,95 @@ public class GUI {
 
     }
 
-    public static Inventory getListView() {
+    public static Inventory getListView(String type) {
 
         ArrayList<Player> onlinePlayerList = new ArrayList<>(Bukkit.getOnlinePlayers());
-        Inventory inv = Bukkit.createInventory(null, 54, "Bounty List");
+        Inventory inv = Bukkit.createInventory(null, 54, "Bounty List: " + type);
+
+        switch(type) {
+
+            case "Place":
+
+                for(int i = 0; i < onlinePlayerList.size(); i++) {
+
+                    Player c = onlinePlayerList.get(i);
+                    if(PDCUtil.isEnabled(c) && !PDCUtil.hasBountyPlacer(c) && PDCUtil.isOffShield(c)) {
+
+                        ItemStack playerSkull = new ItemStack(Material.PLAYER_HEAD, 1);
+
+                        ArrayList<String> desc = new ArrayList<>();
+                        SkullMeta meta = (SkullMeta) playerSkull.getItemMeta();
+                        meta.setOwningPlayer(onlinePlayerList.get(i));
+                        meta.setDisplayName(onlinePlayerList.get(i).getName());
+                        desc.add(ChatColor.GOLD + "Click to place bounty");
+                        meta.setLore(desc);
+
+                        playerSkull.setItemMeta(meta);
+
+                        inv.addItem(playerSkull);
+
+                    }
+
+                }
+
+                break;
+
+            case "View":
+
+                for(int i = 0; i < onlinePlayerList.size(); i++) {
+
+                    Player c = onlinePlayerList.get(i);
+                    if(PDCUtil.isEnabled(c) && PDCUtil.hasBountyPlacer(c) && !PDCUtil.hasBountyHunter(c)) {
+
+                        ItemStack playerSkull = new ItemStack(Material.PLAYER_HEAD, 1);
+
+                        ArrayList<String> desc = new ArrayList<>();
+                        SkullMeta meta = (SkullMeta) playerSkull.getItemMeta();
+                        meta.setOwningPlayer(onlinePlayerList.get(i));
+                        meta.setDisplayName(onlinePlayerList.get(i).getName());
+                        desc.add(ChatColor.GOLD + "Click to view bounty");
+                        desc.add(ChatColor.AQUA + "Bounty Placer: " + PlayerUtil.getPlayer(PDCUtil.getBountyPlacer(onlinePlayerList.get(i))).getName());
+                        meta.setLore(desc);
+
+                        playerSkull.setItemMeta(meta);
+
+                        inv.addItem(playerSkull);
+
+                    }
+
+                }
+
+                break;
+
+            case "Active":
+
+                for(int i = 0; i < onlinePlayerList.size(); i++) {
+
+                    Player c = onlinePlayerList.get(i);
+                    if(PDCUtil.isEnabled(c) && PDCUtil.hasBountyPlacer(c) && PDCUtil.hasBountyHunter(c)) {
+
+                        ItemStack playerSkull = new ItemStack(Material.PLAYER_HEAD, 1);
+
+                        ArrayList<String> desc = new ArrayList<>();
+                        SkullMeta meta = (SkullMeta) playerSkull.getItemMeta();
+                        meta.setOwningPlayer(onlinePlayerList.get(i));
+                        meta.setDisplayName(onlinePlayerList.get(i).getName());
+                        desc.add(ChatColor.GOLD + "Click to view bounty");
+                        desc.add(ChatColor.AQUA + "Bounty Placer: " + PlayerUtil.getPlayer(PDCUtil.getBountyPlacer(c)).getName());
+                        desc.add(ChatColor.AQUA + "Bounty Hunter: " + PlayerUtil.getPlayer(PDCUtil.getBountyHunter(c)).getName());
+                        meta.setLore(desc);
+
+                        playerSkull.setItemMeta(meta);
+
+                        inv.addItem(playerSkull);
+
+                    }
+
+                }
+
+                break;
+
+        }
 
         for(int i = 0; i < onlinePlayerList.size(); i++) {
 
