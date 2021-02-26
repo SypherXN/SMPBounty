@@ -29,6 +29,7 @@ public class ClearCommand extends SubCommand {
 
         if(target == null) { return; }
 
+        PDCUtil.setEnableState(target, "Disabled");
         PDCUtil.clearPlaceTime(target);
         PDCUtil.clearShieldTime(target);
         PDCUtil.clearBountyPlacer(target);

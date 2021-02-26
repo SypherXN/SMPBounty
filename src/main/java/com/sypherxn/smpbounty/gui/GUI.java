@@ -19,11 +19,21 @@ public class GUI {
 
     public static Inventory getActiveRewardView(Player p) {
 
-        Inventory inv = Bukkit.createInventory(null, 9, "Bounty View: " + p.getName());
+        Inventory inv = Bukkit.createInventory(null, 18, ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty View: " + p.getName());
         ArrayList<ItemStack> items = PDCUtil.getRewardItems(p);
 
         items.stream()
                 .forEach(inv::addItem);
+
+        ItemStack cancel = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
+        ItemMeta cancelMeta = cancel.getItemMeta();
+        ArrayList<String> cancelDesc = new ArrayList<>();
+        cancelDesc.add(ChatColor.RED + "Click to go back");
+        cancelMeta.setLore(cancelDesc);
+        cancelMeta.setDisplayName(ChatColor.RED + "BACK");
+        cancel.setItemMeta(cancelMeta);
+
+        inv.setItem(13, cancel);
 
         return inv;
 
@@ -31,7 +41,7 @@ public class GUI {
 
     public static Inventory getRewardView(Player p) {
 
-        Inventory inv = Bukkit.createInventory(null, 18, "Bounty View: " + p.getName());
+        Inventory inv = Bukkit.createInventory(null, 18, ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty View: " + p.getName());
         ArrayList<ItemStack> items = PDCUtil.getRewardItems(p);
 
         items.stream()
@@ -53,8 +63,8 @@ public class GUI {
         cancelMeta.setDisplayName(ChatColor.RED + "CANCEL");
         cancel.setItemMeta(cancelMeta);
 
-        inv.addItem(confirm);
-        inv.addItem(cancel);
+        inv.setItem(12, confirm);
+        inv.setItem(14, cancel);
 
         return inv;
 
@@ -62,7 +72,7 @@ public class GUI {
 
     public static Inventory getCollectView(Player p) {
 
-        Inventory inv = Bukkit.createInventory(null, 9, "Bounty Collect: " + p.getName());
+        Inventory inv = Bukkit.createInventory(null, 9, ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty Collect: " + p.getName());
         ArrayList<ItemStack> items = PDCUtil.getCollectItems(p);
 
         items.stream()
@@ -75,7 +85,7 @@ public class GUI {
     public static Inventory getListView(String type) {
 
         ArrayList<Player> onlinePlayerList = new ArrayList<>(Bukkit.getOnlinePlayers());
-        Inventory inv = Bukkit.createInventory(null, 54, "Bounty List: " + type);
+        Inventory inv = Bukkit.createInventory(null, 54, ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty List: " + type);
 
         switch(type) {
 
@@ -162,13 +172,23 @@ public class GUI {
 
         }
 
+        ItemStack cancel = new ItemStack(Material.RED_STAINED_GLASS_PANE, 1);
+        ItemMeta cancelMeta = cancel.getItemMeta();
+        ArrayList<String> cancelDesc = new ArrayList<>();
+        cancelDesc.add(ChatColor.RED + "Click to go back");
+        cancelMeta.setLore(cancelDesc);
+        cancelMeta.setDisplayName(ChatColor.RED + "BACK");
+        cancel.setItemMeta(cancelMeta);
+
+        inv.setItem(53, cancel);
+
         return inv;
 
     }
 
     // WHEN YOU CHANGE ANY NAME, DON'T FORGET TO CHANGE THE LISTENER! ! ! ! !
     public static Inventory getMainView(Player p) {
-        Inventory inv = Bukkit.createInventory(null, 9, "Bounty Office");
+        Inventory inv = Bukkit.createInventory(null, 54, ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty Office");
 
         // Enable
         if(!PDCUtil.isEnabled(p)){
@@ -179,12 +199,12 @@ public class GUI {
 
             enableDesc.add(ChatColor.GOLD + "Click to enable Bounty mode");
             enableDesc.add(ChatColor.RED + "WARNING: Once you opt in, there's no opting out");
-            meta.setDisplayName("Bounty System Disabled");
+            meta.setDisplayName(ChatColor.RED + ChatColor.BOLD.toString() + "Bounty System Disabled");
             meta.setLore(enableDesc);
 
             enableButton.setItemMeta(meta);
             
-            inv.addItem(enableButton);
+            inv.setItem(22, enableButton);
 
         }
         else {
@@ -195,12 +215,12 @@ public class GUI {
 
             enableDesc.add(ChatColor.GREEN + "You are already in bounty mode");
             enableDesc.add(ChatColor.GREEN + "You will exit bounty mode when someone places and collects a bounty on you");
-            meta.setDisplayName("Bounty System Enabled");
+            meta.setDisplayName(ChatColor.GREEN + ChatColor.BOLD.toString() + "Bounty System Enabled");
             meta.setLore(enableDesc);
 
             enableButton.setItemMeta(meta);
             
-            inv.addItem(enableButton);
+            inv.setItem(22, enableButton);
 
         }
 
@@ -209,39 +229,38 @@ public class GUI {
         ArrayList<String> placeDesc = new ArrayList<>();
         ItemMeta placeMeta = placeButton.getItemMeta();
 
-        placeMeta.setDisplayName("Place Bounty");
+        placeMeta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Place Bounty");
         placeDesc.add("Click here to place a bounty or view available targets");
         placeMeta.setLore(placeDesc);
 
         placeButton.setItemMeta(placeMeta);
 
-        inv.addItem(placeButton);
+        inv.setItem(39, placeButton);
 
         // View/Accept
-        ItemStack viewButton = new ItemStack(Material.PAPER, 1);
+        ItemStack viewButton = new ItemStack(Material.OAK_SIGN, 1);
         ArrayList<String> viewDesc = new ArrayList<>();
         ItemMeta viewMeta = viewButton.getItemMeta();
 
-        viewMeta.setDisplayName("View Bounties");
+        viewMeta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "View Bounties");
         viewDesc.add("Click here to view available bounties");
-        viewMeta.setLore(placeDesc);
+        viewMeta.setLore(viewDesc);
 
         viewButton.setItemMeta(viewMeta);
 
-        inv.addItem(viewButton);
-        
-        // Active bounties NOT IMPLEMENTED
+        inv.setItem(40, viewButton);
 
-        ItemStack activeButton = new ItemStack(Material.OAK_SIGN, 1);
+        ItemStack activeButton = new ItemStack(Material.DIAMOND, 1);
         ItemMeta activeMeta = activeButton.getItemMeta();
         ArrayList<String> activeDesc = new ArrayList<>();
 
-        activeMeta.setDisplayName("Currently Active Bounties");
+        activeMeta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Currently Active Bounties");
         activeDesc.add("Click here to view already accepted bounties");
-        activeDesc.add(ChatColor.BOLD + "TO BE IMPLEMENTED.");
         activeMeta.setLore(activeDesc);
 
         activeButton.setItemMeta(activeMeta);
+
+        inv.setItem(41, activeButton);
 
         // Collect page
         ItemStack collectButton = new ItemStack(Material.CHEST, 1);
@@ -251,12 +270,12 @@ public class GUI {
         if(PDCUtil.getCollectItems(p).size() > 0){ //I THINK IT'S getCollectItems, but could be getRewardItems???
             collectButton = new ItemStack(Material.CHEST, 1);
             collectDesc.add("Collect your hard earned rewards here");
-            collectMeta.setDisplayName("Collect Rewards");  
+            collectMeta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Collect Rewards");
         }
         else{
             collectButton = new ItemStack(Material.ENDER_CHEST, 1);
             collectDesc.add("You have no items to collect");
-            collectMeta.setDisplayName("No rewards pending");  
+            collectMeta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "No Rewards Pending");
         }
 
  
@@ -264,14 +283,14 @@ public class GUI {
 
         collectButton.setItemMeta(collectMeta);
 
-        inv.addItem(collectButton);
+        inv.setItem(49, collectButton);
 
         // Stats
         ItemStack statsButton = new ItemStack(Material.PLAYER_HEAD, 1);
         ArrayList<String> statsDesc = new ArrayList<>();
         SkullMeta statsSkullMeta = (SkullMeta) statsButton.getItemMeta();
         statsSkullMeta.setOwningPlayer(p);
-        statsSkullMeta.setDisplayName(ChatColor.BOLD + "Your stats:");
+        statsSkullMeta.setDisplayName(ChatColor.GOLD.toString() + ChatColor.BOLD + "Your Stats:");
 
         statsDesc.add("Total Bounties Succeeded: " + StatsUtil.getBountyKills(p));
         statsDesc.add("Total Bounties Failed: " + StatsUtil.getBountyFailed(p));
@@ -281,28 +300,30 @@ public class GUI {
 
         statsButton.setItemMeta(statsSkullMeta);
 
-        inv.addItem(statsButton);
+        inv.setItem(25, statsButton);
 
         // Help
         ItemStack helpButton = new ItemStack(Material.BOOK, 1);
         ArrayList<String> helpDesc = new ArrayList<>();
         ItemMeta helpMeta = helpButton.getItemMeta();
-        helpMeta.setDisplayName(ChatColor.BOLD + "How to use the Bounty plugin: ");
+        helpMeta.setDisplayName(ChatColor.GOLD.toString() + ChatColor.BOLD + "How Bounties WorK:");
 
-        helpDesc.add("I don't get paid enought to write strings");
+        helpDesc.add("Somebody places a places on their target");
+        helpDesc.add("Another player accepts the bounty and starts hunting the target");
+        helpDesc.add("If the player succeeds in killing their target they receive the bounty reward");
         // Add more description
 
         helpMeta.setLore(helpDesc);
 
         helpButton.setItemMeta(helpMeta);
 
-        inv.addItem(helpButton);
+        inv.setItem(19, helpButton);
 
         // Place cd
         ItemStack placeCooldownButton = new ItemStack(Material.PAPER, 1);
         ArrayList<String> placeCooldownDesc = new ArrayList<>();
         ItemMeta placeCooldownMeta = placeCooldownButton.getItemMeta();
-        placeCooldownMeta.setDisplayName(ChatColor.AQUA + "Bounty Place Cooldown");
+        placeCooldownMeta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Bounty Place Cooldown");
 
         placeCooldownDesc.add("Time remaining: " + PDCUtil.getRemainingPlaceCooldown(p));
 
@@ -310,13 +331,13 @@ public class GUI {
 
         placeCooldownButton.setItemMeta(placeCooldownMeta);
 
-        inv.addItem(placeCooldownButton);
+        inv.setItem(3, placeCooldownButton);
 
         // Shield cd
         ItemStack shieldRemainingButton = new ItemStack(Material.SHIELD, 1);
         ArrayList<String> shieldRemainingDesc = new ArrayList<>();
         ItemMeta shieldRemainingMeta = shieldRemainingButton.getItemMeta();
-        shieldRemainingMeta.setDisplayName(ChatColor.AQUA + "Shield Duration Remaining: ");
+        shieldRemainingMeta.setDisplayName(ChatColor.GOLD + ChatColor.BOLD.toString() + "Shield Duration Remaining: ");
 
         shieldRemainingDesc.add("Time remaining: " + PDCUtil.getRemainingShieldTime(p));
 
@@ -324,7 +345,7 @@ public class GUI {
 
         shieldRemainingButton.setItemMeta(shieldRemainingMeta);
 
-        inv.addItem(shieldRemainingButton);
+        inv.setItem(5, shieldRemainingButton);
 
         return inv;
 

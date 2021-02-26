@@ -37,8 +37,6 @@ public class CommandManager implements CommandExecutor {
 
     //Moderation Command
     public String clear = "clear";
-    public String reset = "reset";
-    public String set = "set";
     public String get = "get";
 
     public void setup() {

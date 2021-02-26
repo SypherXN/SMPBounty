@@ -5,6 +5,7 @@ import com.sypherxn.smpbounty.util.ChatUtil;
 import com.sypherxn.smpbounty.util.PDCUtil;
 import com.sypherxn.smpbounty.util.PlayerUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -54,7 +55,7 @@ public class PlaceCommand extends SubCommand {
 
         targetName = target.getName();
 
-        Inventory bountyPlace = Bukkit.createInventory(p, 9, "Bounty Place: " + targetName);
+        Inventory bountyPlace = Bukkit.createInventory(p, 9, ChatColor.DARK_AQUA + ChatColor.BOLD.toString() + "Bounty Place: " + targetName);
         p.openInventory(bountyPlace);
 
     }
