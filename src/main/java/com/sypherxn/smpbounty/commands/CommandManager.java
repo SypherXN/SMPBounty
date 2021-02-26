@@ -31,7 +31,6 @@ public class CommandManager implements CommandExecutor {
     public String accept = "accept";
     public String view = "view";
     public String list = "list";
-    public String bounty = "bounty"
 
     //Moderation Command
     public String clear = "clear";
@@ -53,7 +52,6 @@ public class CommandManager implements CommandExecutor {
         this.commands.add(new AcceptCommand());
         this.commands.add(new ViewCommand());
         this.commands.add(new ListCommand());
-        this.commands.add(new MainCommand());
 
         //Add moderation commands
         this.modCommands.add(new ClearCommand());
@@ -88,8 +86,10 @@ public class CommandManager implements CommandExecutor {
 
             if(args.length == 0) {
 
-                ChatUtil.sendMessage(p, "Invalid command. Type /bounty help for help");
-                return false;
+                Inventory inv = GUI.getMainView(p);
+                p.openInventory(inv);
+
+                return true; //Code works in mysterious ways
 
             }
 
@@ -98,7 +98,7 @@ public class CommandManager implements CommandExecutor {
             if (target == null) {
 
                 ChatUtil.sendMessage(p, "Invalid command. Type /bounty help for help");
-                return false;
+                return true;
 
             }
 

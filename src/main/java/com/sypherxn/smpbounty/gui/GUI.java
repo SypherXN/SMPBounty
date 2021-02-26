@@ -71,8 +71,9 @@ public class GUI {
 
     }
 
+    // WHEN YOU CHANGE ANY NAME, DON'T FORGET TO CHANGE THE LISTENER! ! ! ! !
     public static Inventory getMainView(Player p) {
-        Inventory inv = Bukkit.createInventory(null, 9, "Bounty Board");
+        Inventory inv = Bukkit.createInventory(null, 9, "Bounty Office");
 
         // Enable
         if(!PDCUtil.isEnabled(p)){
@@ -81,8 +82,9 @@ public class GUI {
             ArrayList<String> enableDesc = new ArrayList<>();
             ItemMeta meta = enableButton.getItemMeta();
 
-            enableDesc.add(ChatColor.GOLD + "Click to enable Bounty mode")
-            enableDesc.add(ChatColor.RED + "WARNING: Once you opt in, there's no opting out")
+            enableDesc.add(ChatColor.GOLD + "Click to enable Bounty mode");
+            enableDesc.add(ChatColor.RED + "WARNING: Once you opt in, there's no opting out");
+            meta.setDisplayName("Bounty System Disabled");
             meta.setLore(enableDesc);
             
             inv.addItem(enableButton);
@@ -96,6 +98,7 @@ public class GUI {
 
             enableDesc.add(ChatColor.GREEN + "You are already in bounty mode")
             enableDesc.add(ChatColor.GREEN + "You will exit bounty mode when someone places and collects a bounty on you")
+            meta.setDisplayName("Bounty System Enabled");
             meta.setLore(enableDesc);
             
             inv.addItem(enableButton);
@@ -142,13 +145,15 @@ public class GUI {
         if(PDCUtil.getCollectItems(p).size() > 0){ //I THINK IT'S getCollectItems, but could be getRewardItems???
             collectButton = new ItemStack(Material.BLOCK_CHEST_OPEN, 1);
             collectDesc.add("Collect your hard earned rewards here");
+            collectMeta.setDisplayName("Collect Rewards");  
         }
         else{
             collectButton = newItemStack(Material.BLOCK_CHEST_CLOSE, 1);
             collectDesc.add("You have no items to collect")
+            collectMeta.setDisplayName("No rewards pending");  
         }
 
-        collectMeta.setDisplayName("Collect Bounty")      
+ 
         collectMeta.setLore(collectDesc);
 
         inv.addItem(collectButton);
