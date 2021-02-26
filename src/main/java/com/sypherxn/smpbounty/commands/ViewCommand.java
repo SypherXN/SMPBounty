@@ -16,29 +16,15 @@ public class ViewCommand extends SubCommand {
     @Override
     public void onCommand(Player p, String[] args) {
 
-        if(!PDCUtil.isEnabled(p)) {
-
-            ChatUtil.sendMessage(p, "You cannot view bounties if you are not bounty-enabled");
+        if(args.length < 2) {
+            ChatUtil.sendMessage(p, "Correct usage /bounty view <player name>");
             return;
-
-        }
-
-        if(args.length < 1) {
-
-            ChatUtil.sendMessage(p, "Correct usage /bounty accept <player name>");
-
         }
 
         String targetName = args[1];
         Player target = PlayerUtil.getPlayer(p, targetName);
-        UUID targetUUID = target.getUniqueId();
 
-        if(targetUUID == null) {
-
-            ChatUtil.sendMessage(p, targetName + " could not be found");
-            return;
-
-        }
+        if(target == null) { return; }
 
         Inventory bountyView = GUI.getRewardView(target);
         p.openInventory(bountyView);

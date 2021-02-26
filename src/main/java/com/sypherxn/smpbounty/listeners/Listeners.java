@@ -1,12 +1,15 @@
 package com.sypherxn.smpbounty.listeners;
 
 import com.sypherxn.smpbounty.SMPBounty;
+import com.sypherxn.smpbounty.commands.AcceptCommand;
+import com.sypherxn.smpbounty.commands.SubCommand;
 import com.sypherxn.smpbounty.gui.GUI;
 import com.sypherxn.smpbounty.util.ChatUtil;
 import com.sypherxn.smpbounty.util.PDCUtil;
 import com.sypherxn.smpbounty.util.PlayerUtil;
 import com.sypherxn.smpbounty.util.StatsUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -189,7 +192,7 @@ public class Listeners implements Listener {
 
     //Cancel Taking items out of Bounty View
     @EventHandler
-    public void cancelGUIClick(InventoryClickEvent e) {
+    public void viewClick(InventoryClickEvent e) {
 
         if(e.getView().getTitle().length() < 12) { return; }
 
@@ -198,6 +201,27 @@ public class Listeners implements Listener {
         if(viewCheck.equalsIgnoreCase("Bounty View:")) {
 
             e.setCancelled(true);
+
+            ItemStack item = e.getCurrentItem();
+            if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.GREEN + "CONFIRM")) {
+
+                String target = e.getView().getTitle().substring(13);
+
+                SubCommand cmd = new AcceptCommand();
+                cmd.onCommand((Player) e.getWhoClicked(), new String[]{"", target});
+                e.getWhoClicked().closeInventory();
+
+            } else if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(ChatColor.RED + "CANCEL")) {
+
+                Inventory viewInv = GUI.getListView("View");
+                e.getWhoClicked().openInventory(viewInv);
+
+            } else if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("BACK")) {
+
+                Inventory activeInv = GUI.getListView("Active");
+                e.getWhoClicked().openInventory(activeInv);
+
+            }
 
         }
 
@@ -209,11 +233,12 @@ public class Listeners implements Listener {
 
         String listCheck = e.getView().getTitle();
         ItemStack clickedItem = e.getCurrentItem();
+
         String name = clickedItem.getItemMeta().getDisplayName();
         Player p = (Player) e.getWhoClicked();
         Player target = PlayerUtil.getPlayer(name);
 
-        if(listCheck.equalsIgnoreCase("Bounty List")) {
+        if(listCheck.equalsIgnoreCase("Bounty List: View")) {
 
             Inventory bountyView = GUI.getRewardView(target);
 

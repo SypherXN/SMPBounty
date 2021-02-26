@@ -10,7 +10,7 @@ public class ListCommand extends SubCommand {
     @Override
     public void onCommand(Player p, String[] args) {
 
-        Inventory bountyList = GUI.getListView();
+        Inventory bountyList = GUI.getListView("View");
 
         p.openInventory(bountyList);
 
