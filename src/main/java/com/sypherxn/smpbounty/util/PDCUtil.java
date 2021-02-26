@@ -253,6 +253,9 @@ public class PDCUtil {
         long minutes = (cooldownSeconds / 60) % 60;
         long seconds = cooldownSeconds % 60;
         remainingCooldown = "" + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds";
+        if(cooldownSeconds < 1) {
+            return "You are off cooldown";
+        }
         return remainingCooldown;
     }
 
@@ -291,6 +294,9 @@ public class PDCUtil {
         long minutes = (cooldownSeconds / 60) % 60;
         long seconds = cooldownSeconds % 60;
         remainingShield = "" + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds";
+        if(cooldownSeconds < 1) {
+            return "You have no shield remaining";
+        }
         return remainingShield;
     }
 

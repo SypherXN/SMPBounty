@@ -2,6 +2,7 @@ package com.sypherxn.smpbounty.listeners;
 
 import com.sypherxn.smpbounty.SMPBounty;
 import com.sypherxn.smpbounty.commands.AcceptCommand;
+import com.sypherxn.smpbounty.commands.CollectCommand;
 import com.sypherxn.smpbounty.commands.SubCommand;
 import com.sypherxn.smpbounty.gui.GUI;
 import com.sypherxn.smpbounty.util.ChatUtil;
@@ -261,6 +262,7 @@ public class Listeners implements Listener {
         Player p = (Player) e.getWhoClicked();
 
         if(listCheck.equalsIgnoreCase("Bounty Office")) {
+            e.setCancelled(true);
             switch (name) {
                 case "Bounty System Disabled":
                     PDCUtil.setEnableState(p, "Enabled");
@@ -269,13 +271,17 @@ public class Listeners implements Listener {
                     break;
 
                 case "Place Bounty":
-                    // Doesn't exist yet
+                    Inventory inv2 = GUI.getListView("Place");
+                    p.openInventory(inv2);
                     break;
-                case "View Bounty": 
-                    // Cannot
+
+                case "View Bounties":
+                    Inventory inv3 = GUI.getListView("View");
+                    p.openInventory(inv3);
                     break;
                 case "Active Bounties":
-                    // Cannot
+                    Inventory inv4 = GUI.getListView("Active");
+                    p.openInventory(inv4);
                     break;
                 case "Collect Rewards":
                     SubCommand cmd = new CollectCommand();
