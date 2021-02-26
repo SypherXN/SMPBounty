@@ -31,6 +31,7 @@ public class CommandManager implements CommandExecutor {
     public String accept = "accept";
     public String view = "view";
     public String list = "list";
+    public String bounty = "bounty"
 
     //Moderation Command
     public String clear = "clear";
@@ -52,6 +53,7 @@ public class CommandManager implements CommandExecutor {
         this.commands.add(new AcceptCommand());
         this.commands.add(new ViewCommand());
         this.commands.add(new ListCommand());
+        this.commands.add(new MainCommand());
 
         //Add moderation commands
         this.modCommands.add(new ClearCommand());
