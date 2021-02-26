@@ -250,6 +250,44 @@ public class Listeners implements Listener {
 
     }
 
+    @EventHandler
+    public void mainGUIClick(InventoryClickEvent e) {
+
+        if(e.getView().getTitle().length() < 13) { return; }
+
+        String listCheck = e.getView().getTitle().substring(0, 13);
+        ItemStack clickedItem = e.getCurrentItem();
+        String name = clickedItem.getItemMeta().getDisplayName();
+        Player p = (Player) e.getWhoClicked();
+
+        if(listCheck.equalsIgnoreCase("Bounty Office")) {
+            switch (name) {
+                case "Bounty System Disabled":
+                    PDCUtil.setEnableState(p, "Enabled");
+                    Inventory inv = GUI.getMainView(p);
+                    p.openInventory(inv);
+                    break;
+
+                case "Place Bounty":
+                    // Doesn't exist yet
+                    break;
+                case "View Bounty": 
+                    // Cannot
+                    break;
+                case "Active Bounties":
+                    // Cannot
+                    break;
+                case "Collect Rewards":
+                    SubCommand cmd = new CollectCommand();
+                    cmd.onCommand(p, new String[0]);
+                    break;
+
+            }
+
+        }
+
+    }
+
     //Check if player death impacts bounties
     @EventHandler
     public void playerDeathCheck(PlayerDeathEvent e) {

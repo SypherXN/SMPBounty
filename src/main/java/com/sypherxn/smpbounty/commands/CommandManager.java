@@ -87,8 +87,10 @@ public class CommandManager implements CommandExecutor {
 
             if(args.length == 0) {
 
-                ChatUtil.sendMessage(p, "Invalid command. Type /bounty help for help");
-                return false;
+                Inventory inv = GUI.getMainView(p);
+                p.openInventory(inv);
+
+                return true; //Code works in mysterious ways
 
             }
 
@@ -97,7 +99,7 @@ public class CommandManager implements CommandExecutor {
             if (target == null) {
 
                 ChatUtil.sendMessage(p, "Invalid command. Type /bounty help for help");
-                return false;
+                return true;
 
             }
 
