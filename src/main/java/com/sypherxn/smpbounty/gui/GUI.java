@@ -308,8 +308,9 @@ public class GUI {
         ItemMeta helpMeta = helpButton.getItemMeta();
         helpMeta.setDisplayName(ChatColor.GOLD.toString() + ChatColor.BOLD + "How Bounties WorK:");
 
-        helpDesc.add("Somebody places a places on their target");
-        helpDesc.add("Another player accepts the bounty and starts hunting the target");
+        helpDesc.add("All participants must enable the bounty system");
+        helpDesc.add("Then one player puts a bounty on another");
+        helpDesc.add("Another player must accept the bounty, then hunt down the target");
         helpDesc.add("If the player succeeds in killing their target they receive the bounty reward");
         // Add more description
 
