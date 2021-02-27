@@ -52,4 +52,11 @@ public class PlayerUtil {
 
     }
 
+    public static String getName(UUID uuid) {
+
+        if(Bukkit.getPlayer(uuid).isOnline()) { return Bukkit.getPlayer(uuid).getName(); }
+        else { return Bukkit.getOfflinePlayer(uuid).getName(); }
+
+    }
+
 }

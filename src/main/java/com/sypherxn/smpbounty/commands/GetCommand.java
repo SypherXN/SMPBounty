@@ -37,6 +37,7 @@ public class GetCommand extends SubCommand {
         ChatUtil.sendMessage(p, "BountyPlacer: " + PDCUtil.getBountyPlacer(target).toString());
         ChatUtil.sendMessage(p, "PlaceCooldown: " + PDCUtil.getRemainingPlaceCooldown(target));
         ChatUtil.sendMessage(p, "ShieldTime: " + PDCUtil.getRemainingShieldTime(target));
+        ChatUtil.sendMessage(p, "CombatTag: " + PDCUtil.getRemainingCombatTag(target));
         ChatUtil.sendMessage(p, "RewardItems: " + PDCUtil.getRewardItems(target).toString());
         ChatUtil.sendMessage(p, "CollectItems: " + PDCUtil.getCollectItems(target).toString());
 

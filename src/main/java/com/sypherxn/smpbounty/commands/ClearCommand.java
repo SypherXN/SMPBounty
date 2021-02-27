@@ -38,6 +38,7 @@ public class ClearCommand extends SubCommand {
         PDCUtil.clearHunting(target);
         PDCUtil.clearCollectItems(target);
         PDCUtil.clearBountyHunter(target);
+        PDCUtil.clearCombatTagTime(target);
 
         ChatUtil.sendMessage(p, "You have successfully cleared " + target.getName() + "'s bounty data");
 

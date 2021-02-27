@@ -10,18 +10,18 @@ import com.sypherxn.smpbounty.util.ChatUtil;
 import com.sypherxn.smpbounty.util.PDCUtil;
 import com.sypherxn.smpbounty.util.PlayerUtil;
 import com.sypherxn.smpbounty.util.StatsUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -81,6 +81,11 @@ public class Listeners implements Listener {
         //ShieldTime
         if(!data.has(new NamespacedKey(SMPBounty.getPlugin(), "ShieldTime"), PersistentDataType.LONG)) {
             data.set(new NamespacedKey(SMPBounty.getPlugin(), "ShieldTime"), PersistentDataType.LONG, (long)0);
+        }
+
+        //CombatTag
+        if(!data.has(new NamespacedKey(SMPBounty.getPlugin(), "CombatTag"), PersistentDataType.LONG)) {
+            data.set(new NamespacedKey(SMPBounty.getPlugin(), "CombatTag"), PersistentDataType.LONG, (long)0);
         }
 
         //BountyKills
@@ -346,7 +351,7 @@ public class Listeners implements Listener {
             Player bountyPlacer = PlayerUtil.getPlayer(bountyPlacerUUID);
             if(deathHunterUUID.equals(killerUUID)) {
 
-                ChatUtil.sendBroadcast(killer.getName() + " has killed " + death.getName() + " and has collected their reward from " + bountyPlacer.getName());
+                ChatUtil.sendBroadcast(killer.getName() + " has killed " + death.getName() + " and has collected their reward from " + PlayerUtil.getName(bountyPlacerUUID));
 
                 ArrayList<ItemStack> reward = PDCUtil.getRewardItems(death);
                 PDCUtil.setCollectItems(killer, reward);
@@ -362,6 +367,20 @@ public class Listeners implements Listener {
 
                 PDCUtil.clearTargeting(bountyPlacer);
 
+                ItemStack playerSkull = new ItemStack(Material.PLAYER_HEAD, 1);
+                ArrayList<String> desc = new ArrayList<>();
+                SkullMeta meta = (SkullMeta) playerSkull.getItemMeta();
+                meta.setOwningPlayer(death);
+                meta.setDisplayName(death.getName());
+                desc.add(ChatColor.GOLD + "Bounty Completed");
+                meta.setLore(desc);
+                playerSkull.setItemMeta(meta);
+
+                ArrayList<ItemStack> single = new ArrayList<>();
+                single.add(playerSkull);
+
+                PDCUtil.setCollectItems(bountyPlacer, single);
+
                 return;
 
             }
@@ -372,7 +391,7 @@ public class Listeners implements Listener {
 
             if(deathHuntingUUID.equals(killerUUID)) {
 
-                ChatUtil.sendBroadcast(death.getName() + " has failed to complete " + bountyPlacer.getName() + "'s bounty on " + killer.getName());
+                ChatUtil.sendBroadcast(death.getName() + " has failed to complete " + PlayerUtil.getName(bountyPlacerUUID) + "'s bounty on " + killer.getName());
 
                 PDCUtil.clearHunting(death);
                 StatsUtil.incrementBountyFailed(death);
@@ -391,6 +410,46 @@ public class Listeners implements Listener {
                 return;
 
             }
+
+        }
+
+    }
+
+    @EventHandler
+    public void combatTagProtection(EntityDamageByEntityEvent e) {
+
+        if(!((e.getEntity() instanceof Player) && (e.getDamager() instanceof Player))) { return; }
+
+        Player target = (Player) e.getEntity();
+        Player hitter = (Player) e.getDamager();
+
+        if(!(PDCUtil.isOffCombatTag(target) && PDCUtil.isOffCombatTag(hitter))) {
+
+            if(!((PDCUtil.getBountyHunter(target).equals(hitter.getUniqueId()) ||
+                    PDCUtil.getHunting(target).equals(hitter.getUniqueId())))) {
+
+                e.setCancelled(true);
+
+                if(PDCUtil.isOffCombatTag(hitter)) {
+
+                    ChatUtil.sendMessage(hitter, target.getName() + " is currently taking part in bounty combat!");
+
+                }
+
+                if(!PDCUtil.isOffCombatTag(hitter)) {
+
+                    ChatUtil.sendMessage(hitter, "You cannot attack others while in bounty combat!");
+
+                }
+
+            }
+
+        }
+
+        if(PDCUtil.getBountyHunter(target).equals(hitter.getUniqueId()) || PDCUtil.getBountyHunter(hitter).equals(target.getUniqueId())) {
+
+            PDCUtil.setCombatTagTime(target);
+            PDCUtil.setCombatTagTime(hitter);
 
         }
 

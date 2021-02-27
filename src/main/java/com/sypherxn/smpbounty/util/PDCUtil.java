@@ -307,4 +307,45 @@ public class PDCUtil {
 
     }
 
+    //CombatTag
+    private static long combatTagTimeLength = 60;
+    public static void setCombatTagTime(Player p) {
+        data = p.getPersistentDataContainer();
+        long currentTime = System.currentTimeMillis();
+        data.set(new NamespacedKey(SMPBounty.getPlugin(), "CombatTag"), PersistentDataType.LONG, currentTime);
+    }
+
+    public static long getCombatTagTime(Player p) {
+        data = p.getPersistentDataContainer();
+        long combatTagTime = data.get(new NamespacedKey(SMPBounty.getPlugin(), "CombatTag"), PersistentDataType.LONG);
+        return combatTagTime;
+    }
+
+    public static void clearCombatTagTime(Player p) {
+        data = p.getPersistentDataContainer();
+        data.set(new NamespacedKey(SMPBounty.getPlugin(), "CombatTag"), PersistentDataType.LONG, (long)0);
+    }
+
+    public static Boolean isOffCombatTag(Player p) {
+
+        if((getCombatTagTime(p) / 1000) > combatTagTimeLength) return false;
+        else return true;
+
+    }
+
+    public static String getRemainingCombatTag(Player p) {
+        data = p.getPersistentDataContainer();
+        String combatTag = "";
+        long placeTimeMillis = getCombatTagTime(p);
+        long cooldownSeconds = ((placeTimeMillis / 1000) + combatTagTimeLength) - (System.currentTimeMillis() / 1000);
+        long hours = cooldownSeconds / 3600;
+        long minutes = (cooldownSeconds / 60) % 60;
+        long seconds = cooldownSeconds % 60;
+        combatTag = "" + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds";
+        if(cooldownSeconds < 1) {
+            return "You have no combat tag remaining";
+        }
+        return combatTag;
+    }
+
 }
